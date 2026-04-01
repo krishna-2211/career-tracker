@@ -1,83 +1,47 @@
 """
-Search Service - Handles web search functionality using Brave Search API.
+Search Service - Handles web search functionality using DuckDuckGo MCP.
 
-This module provides functions to search the web for information about
-career roles and return simplified results.
+This module fetches live search results for career roles using a free MCP endpoint.
 """
 
-# Mock API key for demonstration purposes
-# In production, this would be loaded from environment variables
-BRAVE_API_KEY = "mock_brave_api_key"
+import requests
 
+DUCKDUCKGO_MCP_URL = "https://api.duckduckgo.com/?q={query}&format=json"  # free public MCP
 
 def search_web(query: str) -> dict:
     """
-    Search the web using Brave Search API for information about a career role.
+    Search the web using DuckDuckGo MCP for information about a career role.
     
     Args:
-        query: The search query (typically a career role like "AI Engineer")
+        query: The search query (e.g., "AI Engineer")
     
     Returns:
-        A dictionary containing simplified search results with title and snippet only.
-        Example: {
-            "query": "AI Engineer",
+        A dictionary containing search results with title and snippet.
+    """
+    try:
+        response = requests.get(DUCKDUCKGO_MCP_URL.format(query=query))
+        data = response.json()
+        
+        # DuckDuckGo returns 'RelatedTopics' as a list of results
+        results = []
+        for topic in data.get("RelatedTopics", []):
+            if "Text" in topic and "FirstURL" in topic:
+                results.append({
+                    "title": topic.get("Text"),
+                    "snippet": topic.get("Text")[:250]  # limit snippet length
+                })
+        
+        # Return in same format as previous mock
+        return {
+            "query": query,
+            "results": results[:5]  # limit to top 5 results
+        }
+    except Exception as e:
+        # Fallback to mock if the MCP fails
+        print(f"Error fetching from DuckDuckGo MCP: {e}")
+        return {
+            "query": query,
             "results": [
-                {"title": "What is an AI Engineer?", "snippet": "An AI engineer..."},
-                ...
+                {"title": f"{query} - search failed", "snippet": str(e)}
             ]
         }
-    
-    Note:
-        This is currently using mock data. In production, you would make
-        actual API calls to Brave Search API.
-    """
-    # Mock search results for demonstration
-    # In production, you would use:
-    # import requests
-    # response = requests.get(
-    #     "https://api.search.brave.com/res/v1/web/search",
-    #     headers={"X-Subscription-Token": BRAVE_API_KEY},
-    #     params={"q": query}
-    # )
-    # return response.json()
-    
-    mock_results = {
-        "query": query,
-        "results": [
-            {
-                "title": f"What is a {query}? - Complete Guide",
-                "snippet": f"A {query} is a professional who specializes in designing, building, "
-                          f"and maintaining systems related to this field. Key responsibilities "
-                          f"include developing solutions, analyzing requirements, and collaborating "
-                          f"with cross-functional teams."
-            },
-            {
-                "title": f"Top Skills Required for a {query} in 2024",
-                "snippet": f"Essential skills for a {query} include programming, problem-solving, "
-                          f"data analysis, machine learning fundamentals, cloud computing, and "
-                          f"strong communication abilities. Continuous learning is crucial."
-            },
-            {
-                "title": f"How to Become a {query}: Career Path",
-                "snippet": f"To become a successful {query}, start by learning core technical skills, "
-                          f"build a strong portfolio, contribute to open-source projects, and "
-                          f"stay updated with industry trends. A degree in computer science or "
-                          f"related field is often preferred."
-            },
-            {
-                "title": f"{query} Salary and Job Outlook",
-                "snippet": f"The demand for {query} professionals is growing rapidly. Companies "
-                          f"are looking for candidates with hands-on experience in modern tools "
-                          f"and frameworks, strong analytical skills, and the ability to work "
-                          f"in agile environments."
-            },
-            {
-                "title": f"Best Resources to Learn {query} Skills",
-                "snippet": f"Popular learning resources include online courses, bootcamps, "
-                          f"documentation, and hands-on projects. Focus on building real-world "
-                          f"applications to demonstrate your skills to potential employers."
-            }
-        ]
-    }
-    
-    return mock_results
