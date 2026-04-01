@@ -3,33 +3,28 @@ import { useState } from "react";
 const API_BASE = "http://localhost:8001";
 
 const PRIORITY_CONFIG = {
-  Beginner: { color: "#4ade80", bg: "rgba(74,222,128,0.12)", label: "Beginner" },
-  Intermediate: { color: "#facc15", bg: "rgba(250,204,21,0.12)", label: "Intermediate" },
-  Advanced: { color: "#f87171", bg: "rgba(248,113,113,0.12)", label: "Advanced" },
+  Beginner:     { color: "#4ade80", bg: "rgba(74,222,128,0.10)", border: "rgba(74,222,128,0.2)"  },
+  Intermediate: { color: "#facc15", bg: "rgba(250,204,21,0.10)",  border: "rgba(250,204,21,0.2)"  },
+  Advanced:     { color: "#f87171", bg: "rgba(248,113,113,0.10)", border: "rgba(248,113,113,0.2)" },
 };
 
 const SUGGESTED_ROLES = [
   "AI Engineer", "Data Scientist", "ML Engineer",
   "Software Engineer", "Frontend Developer", "Backend Developer",
-  "Full Stack Developer", "DevOps Engineer", "Cloud Engineer", "Product Manager"
+  "Full Stack Developer", "DevOps Engineer", "Cloud Engineer", "Product Manager",
 ];
 
 function Badge({ priority }) {
-  const cfg = PRIORITY_CONFIG[priority] || { color: "#94a3b8", bg: "rgba(148,163,184,0.12)", label: priority };
+  const cfg = PRIORITY_CONFIG[priority] || { color: "#94a3b8", bg: "rgba(148,163,184,0.1)", border: "rgba(148,163,184,0.2)" };
   return (
     <span style={{
-      background: cfg.bg,
-      color: cfg.color,
-      border: `1px solid ${cfg.color}33`,
-      borderRadius: 4,
-      padding: "2px 8px",
-      fontSize: 11,
-      fontWeight: 700,
-      letterSpacing: "0.06em",
-      fontFamily: "'Space Mono', monospace",
-      textTransform: "uppercase",
+      background: cfg.bg, color: cfg.color,
+      border: `1px solid ${cfg.border}`,
+      borderRadius: 4, padding: "2px 8px",
+      fontSize: 10, fontWeight: 700, letterSpacing: "0.08em",
+      fontFamily: "'Space Mono', monospace", textTransform: "uppercase",
     }}>
-      {cfg.label}
+      {priority}
     </span>
   );
 }
@@ -37,63 +32,49 @@ function Badge({ priority }) {
 function SkillPill({ skill }) {
   return (
     <span style={{
-      background: "rgba(99,102,241,0.12)",
-      color: "#a5b4fc",
-      border: "1px solid rgba(99,102,241,0.25)",
-      borderRadius: 20,
-      padding: "4px 12px",
-      fontSize: 12,
-      fontWeight: 600,
+      background: "rgba(99,102,241,0.1)", color: "#a5b4fc",
+      border: "1px solid rgba(99,102,241,0.2)",
+      borderRadius: 20, padding: "5px 14px",
+      fontSize: 12, fontWeight: 600,
       fontFamily: "'Space Mono', monospace",
-      display: "inline-block",
-      margin: "3px",
-      letterSpacing: "0.02em",
+      display: "inline-block", letterSpacing: "0.02em",
     }}>
       {skill}
     </span>
   );
 }
 
-function RoadmapCard({ item, index }) {
-  const [done, setDone] = useState(item.status === "Completed");
+function RoadmapCard({ item }) {
+  const [done, setDone] = useState(false);
   return (
     <div
       onClick={() => setDone(d => !d)}
       style={{
-        background: done ? "rgba(74,222,128,0.05)" : "rgba(255,255,255,0.03)",
-        border: done ? "1px solid rgba(74,222,128,0.2)" : "1px solid rgba(255,255,255,0.06)",
-        borderRadius: 8,
-        padding: "12px 16px",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        gap: 14,
-        transition: "all 0.2s",
-        marginBottom: 6,
+        background: done ? "rgba(74,222,128,0.04)" : "rgba(255,255,255,0.02)",
+        border: done ? "1px solid rgba(74,222,128,0.15)" : "1px solid rgba(255,255,255,0.06)",
+        borderRadius: 10, padding: "12px 16px", cursor: "pointer",
+        display: "flex", alignItems: "flex-start", gap: 12,
+        transition: "all 0.15s", marginBottom: 6,
       }}
     >
       <div style={{
-        width: 18,
-        height: 18,
-        borderRadius: 4,
-        border: done ? "2px solid #4ade80" : "2px solid rgba(255,255,255,0.2)",
+        marginTop: 2, width: 16, height: 16, borderRadius: 4, flexShrink: 0,
+        border: done ? "2px solid #4ade80" : "2px solid rgba(255,255,255,0.15)",
         background: done ? "#4ade80" : "transparent",
-        flexShrink: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        transition: "all 0.2s",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        transition: "all 0.15s",
       }}>
-        {done && <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+        {done && (
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
+            <path d="M1 3.5L3 5.5L8 1" stroke="#0f172a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          color: done ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.85)",
-          fontSize: 13,
-          fontFamily: "'DM Sans', sans-serif",
-          textDecoration: done ? "line-through" : "none",
-          transition: "all 0.2s",
-          marginBottom: 4,
+          color: done ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.8)",
+          fontSize: 13, lineHeight: 1.5, marginBottom: 6,
+          textDecoration: done ? "line-through" : "none", transition: "all 0.15s",
         }}>
           {item.task}
         </div>
@@ -108,32 +89,24 @@ function RoadmapCard({ item, index }) {
   );
 }
 
-function NotionSyncCard({ data }) {
+function StatCard({ label, value, color }) {
   return (
     <div style={{
-      background: "rgba(99,102,241,0.08)",
-      border: "1px solid rgba(99,102,241,0.2)",
-      borderRadius: 10,
-      padding: "16px 20px",
-      marginTop: 8,
+      background: "rgba(255,255,255,0.03)",
+      border: "1px solid rgba(255,255,255,0.06)",
+      borderRadius: 10, padding: "14px 20px", textAlign: "center", flex: 1,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-        <div style={{ width: 8, height: 8, borderRadius: "50%", background: data.success ? "#4ade80" : "#f87171" }} />
-        <span style={{ color: "#a5b4fc", fontSize: 12, fontFamily: "'Space Mono', monospace", fontWeight: 700 }}>
-          NOTION SYNC
-        </span>
+      <div style={{ color, fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: 22, marginBottom: 4 }}>
+        {value}
       </div>
-      <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
-        {data.message}
-      </div>
-      <div style={{ marginTop: 8, color: "#4ade80", fontSize: 12, fontFamily: "'Space Mono', monospace" }}>
-        {data.tasks_created} tasks created for <strong>{data.role}</strong>
+      <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        {label}
       </div>
     </div>
   );
 }
 
-export default function App() {
+export default function CareerTracker() {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -143,23 +116,16 @@ export default function App() {
 
   async function analyze() {
     if (!role.trim()) return;
-    setLoading(true);
-    setError(null);
-    setResult(null);
+    setLoading(true); setError(null); setResult(null);
     try {
       const res = await fetch(`${API_BASE}/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: role.trim() }),
       });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail || "Server error");
-      }
+      if (!res.ok) { const err = await res.json(); throw new Error(err.detail || "Server error"); }
       const data = await res.json();
-      setResult(data);
-      setActiveTab("roadmap");
-      setFilter("All");
+      setResult(data); setActiveTab("roadmap"); setFilter("All");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -171,7 +137,6 @@ export default function App() {
   const filteredRoadmap = result
     ? (filter === "All" ? result.roadmap : result.roadmap.filter(t => t.priority === filter))
     : [];
-
   const stats = result ? {
     total: result.roadmap.length,
     beginner: result.roadmap.filter(t => t.priority === "Beginner").length,
@@ -181,139 +146,100 @@ export default function App() {
 
   return (
     <div style={{
-      minHeight: "100vh",
-      background: "#0a0a0f",
-      fontFamily: "'DM Sans', sans-serif",
-      color: "#fff",
-      padding: "0 16px 60px",
+      minHeight: "100vh", width: "100vw", background: "#09090f",
+      color: "#fff", fontFamily: "'DM Sans', sans-serif",
+      display: "flex", overflow: "hidden",
     }}>
-      {/* Google Fonts */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Fraunces:ital,wght@0,700;1,700&display=swap');
-        * { box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root { width: 100%; height: 100%; }
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 4px; }
-        input::placeholder { color: rgba(255,255,255,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 4px; }
+        input::placeholder { color: rgba(255,255,255,0.18); }
+        button { font-family: 'DM Sans', sans-serif; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
       `}</style>
 
-      {/* Header */}
-      <div style={{ maxWidth: 760, margin: "0 auto", paddingTop: 56 }}>
+      {/* ── LEFT PANEL ── */}
+      <div style={{
+        width: 360, flexShrink: 0,
+        borderRight: "1px solid rgba(255,255,255,0.06)",
+        padding: "48px 32px",
+        display: "flex", flexDirection: "column", gap: 0,
+        height: "100vh", overflowY: "auto",
+      }}>
         <div style={{
-          display: "inline-block",
-          background: "rgba(99,102,241,0.15)",
-          border: "1px solid rgba(99,102,241,0.3)",
-          borderRadius: 20,
-          padding: "3px 12px",
-          color: "#a5b4fc",
-          fontSize: 11,
-          fontFamily: "'Space Mono', monospace",
-          letterSpacing: "0.1em",
-          marginBottom: 18,
-          textTransform: "uppercase",
+          display: "inline-flex", alignSelf: "flex-start",
+          background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.25)",
+          borderRadius: 20, padding: "3px 12px", color: "#a5b4fc",
+          fontSize: 10, fontFamily: "'Space Mono', monospace",
+          letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 24,
         }}>
-          Tech-Tsunami Career Tracker
+          Tech-Tsunami
         </div>
 
         <h1 style={{
-          fontSize: "clamp(28px, 5vw, 48px)",
-          fontFamily: "'Fraunces', serif",
-          fontWeight: 700,
-          lineHeight: 1.15,
-          margin: "0 0 10px",
-          letterSpacing: "-0.02em",
+          fontSize: 34, fontFamily: "'Fraunces', serif", fontWeight: 700,
+          lineHeight: 1.15, letterSpacing: "-0.02em", marginBottom: 12,
         }}>
           Map your path to{" "}
           <span style={{ fontStyle: "italic", color: "#818cf8" }}>any role</span>
         </h1>
 
-        <p style={{
-          color: "rgba(255,255,255,0.45)",
-          fontSize: 15,
-          marginBottom: 36,
-          maxWidth: 480,
-          lineHeight: 1.6,
-        }}>
-          Enter a career role and get a structured learning roadmap with skills, tasks, and priorities — powered by your FastAPI backend.
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, lineHeight: 1.7, marginBottom: 28 }}>
+          Enter a career role and get a structured learning roadmap with skills, tasks, and priorities.
         </p>
 
-        {/* Input */}
+        {/* Input row */}
         <div style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: 12,
-          padding: 4,
-          display: "flex",
-          gap: 4,
-          marginBottom: 14,
+          background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 12, padding: 4, display: "flex", gap: 4, marginBottom: 10,
         }}>
           <input
             value={role}
             onChange={e => setRole(e.target.value)}
             onKeyDown={e => e.key === "Enter" && analyze()}
-            placeholder="e.g. AI Engineer, Data Scientist, DevOps Engineer..."
+            placeholder="e.g. AI Engineer..."
             style={{
-              flex: 1,
-              background: "transparent",
-              border: "none",
-              outline: "none",
-              color: "#fff",
-              fontSize: 14,
-              padding: "10px 14px",
-              fontFamily: "'DM Sans', sans-serif",
+              flex: 1, background: "transparent", border: "none", outline: "none",
+              color: "#fff", fontSize: 13, padding: "9px 12px",
             }}
           />
           <button
             onClick={analyze}
             disabled={loading || !role.trim()}
             style={{
-              background: loading ? "rgba(99,102,241,0.5)" : "#6366f1",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              padding: "10px 22px",
-              fontSize: 14,
-              fontWeight: 600,
+              background: loading ? "rgba(99,102,241,0.4)" : "#6366f1",
+              color: "#fff", border: "none", borderRadius: 8,
+              padding: "9px 16px", fontSize: 13, fontWeight: 600,
               cursor: loading || !role.trim() ? "not-allowed" : "pointer",
-              transition: "background 0.2s",
-              fontFamily: "'DM Sans', sans-serif",
-              whiteSpace: "nowrap",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
+              transition: "background 0.2s", whiteSpace: "nowrap",
+              display: "flex", alignItems: "center", gap: 6,
             }}
           >
             {loading ? (
               <>
-                <svg width="14" height="14" viewBox="0 0 14 14" style={{ animation: "spin 1s linear infinite" }}>
-                  <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-                  <circle cx="7" cy="7" r="5" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none"/>
-                  <path d="M7 2a5 5 0 0 1 5 5" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                <svg width="12" height="12" viewBox="0 0 12 12" style={{ animation: "spin 1s linear infinite" }}>
+                  <circle cx="6" cy="6" r="4" stroke="rgba(255,255,255,0.25)" strokeWidth="2" fill="none"/>
+                  <path d="M6 2a4 4 0 0 1 4 4" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
                 </svg>
                 Analyzing…
               </>
-            ) : "Analyze Role →"}
+            ) : "Analyze →"}
           </button>
         </div>
 
         {/* Quick picks */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 40 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 20 }}>
           {SUGGESTED_ROLES.map(r => (
-            <button
-              key={r}
-              onClick={() => { setRole(r); }}
-              style={{
-                background: role === r ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.04)",
-                border: role === r ? "1px solid rgba(99,102,241,0.4)" : "1px solid rgba(255,255,255,0.08)",
-                color: role === r ? "#a5b4fc" : "rgba(255,255,255,0.4)",
-                borderRadius: 20,
-                padding: "4px 12px",
-                fontSize: 12,
-                cursor: "pointer",
-                fontFamily: "'DM Sans', sans-serif",
-                transition: "all 0.15s",
-              }}
-            >
+            <button key={r} onClick={() => setRole(r)} style={{
+              background: role === r ? "rgba(99,102,241,0.18)" : "rgba(255,255,255,0.03)",
+              border: role === r ? "1px solid rgba(99,102,241,0.35)" : "1px solid rgba(255,255,255,0.07)",
+              color: role === r ? "#a5b4fc" : "rgba(255,255,255,0.35)",
+              borderRadius: 20, padding: "3px 10px", fontSize: 11, cursor: "pointer", transition: "all 0.15s",
+            }}>
               {r}
             </button>
           ))}
@@ -322,179 +248,173 @@ export default function App() {
         {/* Error */}
         {error && (
           <div style={{
-            background: "rgba(248,113,113,0.1)",
-            border: "1px solid rgba(248,113,113,0.25)",
-            borderRadius: 10,
-            padding: "14px 18px",
-            color: "#fca5a5",
-            fontSize: 13,
-            fontFamily: "'Space Mono', monospace",
-            marginBottom: 24,
+            background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)",
+            borderRadius: 10, padding: "12px 14px", color: "#fca5a5",
+            fontSize: 12, fontFamily: "'Space Mono', monospace", lineHeight: 1.6,
           }}>
             ⚠ {error}
-            {error.toLowerCase().includes("fetch") || error.toLowerCase().includes("network") ? (
-              <div style={{ marginTop: 8, color: "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', sans-serif", fontSize: 12 }}>
-                Make sure your backend is running: <code style={{ color: "#f87171" }}>uvicorn app.main:app --port 8001 --reload</code>
+            {(error.toLowerCase().includes("fetch") || error.toLowerCase().includes("network")) && (
+              <div style={{ marginTop: 6, color: "rgba(255,255,255,0.3)", fontFamily: "'DM Sans', sans-serif", fontSize: 11 }}>
+                Make sure uvicorn is running on port 8001 with CORS configured.
               </div>
-            ) : null}
+            )}
+          </div>
+        )}
+
+        {/* Stats */}
+        {result && stats && (
+          <div style={{ marginTop: "auto", paddingTop: 24 }}>
+            <div style={{
+              color: "rgba(255,255,255,0.2)", fontSize: 10,
+              fontFamily: "'Space Mono', monospace", textTransform: "uppercase",
+              letterSpacing: "0.1em", marginBottom: 10,
+            }}>
+              Overview
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <StatCard label="Total" value={stats.total} color="#a5b4fc" />
+              <StatCard label="Begin" value={stats.beginner} color="#4ade80" />
+              <StatCard label="Mid" value={stats.intermediate} color="#facc15" />
+              <StatCard label="Adv" value={stats.advanced} color="#f87171" />
+            </div>
+          </div>
+        )}
+
+        {!result && !error && (
+          <div style={{ marginTop: "auto", color: "rgba(255,255,255,0.08)", fontSize: 10, fontFamily: "'Space Mono', monospace" }}>
+            backend → localhost:8001
+          </div>
+        )}
+      </div>
+
+      {/* ── RIGHT PANEL ── */}
+      <div style={{ flex: 1, height: "100vh", overflowY: "auto", padding: "48px 52px 80px" }}>
+
+        {/* Empty */}
+        {!result && !loading && !error && (
+          <div style={{
+            height: "100%", display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center", gap: 14,
+            color: "rgba(255,255,255,0.07)", fontFamily: "'Space Mono', monospace", fontSize: 13, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 56 }}>🗺</div>
+            <div>Select a role and click Analyze</div>
+          </div>
+        )}
+
+        {/* Loading */}
+        {loading && (
+          <div style={{
+            height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+            flexDirection: "column", gap: 16,
+            color: "rgba(255,255,255,0.3)", fontFamily: "'Space Mono', monospace", fontSize: 13,
+          }}>
+            <svg width="36" height="36" viewBox="0 0 36 36" style={{ animation: "spin 1s linear infinite" }}>
+              <circle cx="18" cy="18" r="14" stroke="rgba(99,102,241,0.15)" strokeWidth="3" fill="none"/>
+              <path d="M18 4a14 14 0 0 1 14 14" stroke="#6366f1" strokeWidth="3" strokeLinecap="round" fill="none"/>
+            </svg>
+            Analyzing {role}…
           </div>
         )}
 
         {/* Results */}
         {result && (
           <div style={{ animation: "fadeIn 0.3s ease" }}>
-            <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }`}</style>
-
-            {/* Role header */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 24,
-              flexWrap: "wrap",
-              gap: 12,
-            }}>
-              <div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, fontFamily: "'Space Mono', monospace", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                  Results for
-                </div>
-                <h2 style={{ margin: 0, fontFamily: "'Fraunces', serif", fontSize: 24, fontWeight: 700 }}>
-                  {result.role}
-                </h2>
+            <div style={{ marginBottom: 32 }}>
+              <div style={{
+                color: "rgba(255,255,255,0.25)", fontSize: 11,
+                fontFamily: "'Space Mono', monospace", textTransform: "uppercase",
+                letterSpacing: "0.1em", marginBottom: 6,
+              }}>
+                Career roadmap for
               </div>
-              {/* Stats */}
-              <div style={{ display: "flex", gap: 16 }}>
-                {[
-                  { label: "Total", value: stats.total, color: "#a5b4fc" },
-                  { label: "Beginner", value: stats.beginner, color: "#4ade80" },
-                  { label: "Mid", value: stats.intermediate, color: "#facc15" },
-                  { label: "Advanced", value: stats.advanced, color: "#f87171" },
-                ].map(s => (
-                  <div key={s.label} style={{ textAlign: "center" }}>
-                    <div style={{ color: s.color, fontFamily: "'Space Mono', monospace", fontWeight: 700, fontSize: 18 }}>{s.value}</div>
-                    <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
+              <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em" }}>
+                {result.role}
+              </h2>
             </div>
 
             {/* Tabs */}
             <div style={{
-              display: "flex",
-              gap: 2,
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: 8,
-              padding: 3,
-              marginBottom: 20,
-              width: "fit-content",
+              display: "flex", gap: 2,
+              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 10, padding: 3, marginBottom: 24, width: "fit-content",
             }}>
-              {["roadmap", "skills", "notion"].map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    background: activeTab === tab ? "rgba(99,102,241,0.25)" : "transparent",
-                    color: activeTab === tab ? "#a5b4fc" : "rgba(255,255,255,0.35)",
-                    border: "none",
-                    borderRadius: 6,
-                    padding: "7px 16px",
-                    cursor: "pointer",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    fontFamily: "'DM Sans', sans-serif",
-                    transition: "all 0.15s",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {tab === "roadmap" ? `🗺 Roadmap` : tab === "skills" ? `⚡ Skills` : `📓 Notion`}
+              {[{ key: "roadmap", label: "🗺 Roadmap" }, { key: "skills", label: "⚡ Skills" }, { key: "notion", label: "📓 Notion" }].map(tab => (
+                <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
+                  background: activeTab === tab.key ? "rgba(99,102,241,0.2)" : "transparent",
+                  color: activeTab === tab.key ? "#a5b4fc" : "rgba(255,255,255,0.3)",
+                  border: "none", borderRadius: 7, padding: "7px 18px",
+                  cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s",
+                }}>
+                  {tab.label}
                 </button>
               ))}
             </div>
 
-            {/* Roadmap Tab */}
+            {/* Roadmap */}
             {activeTab === "roadmap" && (
               <div>
-                {/* Filter */}
-                <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
                   {priorities.map(p => (
-                    <button
-                      key={p}
-                      onClick={() => setFilter(p)}
-                      style={{
-                        background: filter === p ? "rgba(99,102,241,0.2)" : "transparent",
-                        color: filter === p ? "#a5b4fc" : "rgba(255,255,255,0.3)",
-                        border: filter === p ? "1px solid rgba(99,102,241,0.35)" : "1px solid rgba(255,255,255,0.07)",
-                        borderRadius: 20,
-                        padding: "4px 12px",
-                        cursor: "pointer",
-                        fontSize: 12,
-                        fontFamily: "'Space Mono', monospace",
-                        transition: "all 0.15s",
-                      }}
-                    >
+                    <button key={p} onClick={() => setFilter(p)} style={{
+                      background: filter === p ? "rgba(99,102,241,0.15)" : "transparent",
+                      color: filter === p ? "#a5b4fc" : "rgba(255,255,255,0.25)",
+                      border: filter === p ? "1px solid rgba(99,102,241,0.3)" : "1px solid rgba(255,255,255,0.06)",
+                      borderRadius: 20, padding: "4px 14px", cursor: "pointer",
+                      fontSize: 12, fontFamily: "'Space Mono', monospace", transition: "all 0.15s",
+                    }}>
                       {p}
                     </button>
                   ))}
+                  <span style={{ marginLeft: "auto", color: "rgba(255,255,255,0.15)", fontSize: 11, fontFamily: "'Space Mono', monospace" }}>
+                    click to mark done
+                  </span>
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.25)", fontSize: 11, fontFamily: "'Space Mono', monospace", marginBottom: 10 }}>
-                  Click tasks to mark as done
-                </div>
-                {filteredRoadmap.map((item, i) => (
-                  <RoadmapCard key={i} item={item} index={i} />
-                ))}
+                {filteredRoadmap.map((item, i) => <RoadmapCard key={i} item={item} />)}
               </div>
             )}
 
-            {/* Skills Tab */}
+            {/* Skills */}
             {activeTab === "skills" && (
               <div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, fontFamily: "'Space Mono', monospace", marginBottom: 16 }}>
+                <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, fontFamily: "'Space Mono', monospace", marginBottom: 20 }}>
                   {result.skills.length} skills identified
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {result.skills.map((s, i) => <SkillPill key={i} skill={s} />)}
                 </div>
               </div>
             )}
 
-            {/* Notion Tab */}
+            {/* Notion */}
             {activeTab === "notion" && (
               <div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, fontFamily: "'Space Mono', monospace", marginBottom: 12 }}>
-                  Notion sync status
-                </div>
-                <NotionSyncCard data={result.notion_sync} />
                 <div style={{
-                  marginTop: 16,
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  borderRadius: 8,
-                  padding: "12px 16px",
-                  fontSize: 12,
-                  color: "rgba(255,255,255,0.3)",
-                  fontFamily: "'Space Mono', monospace",
-                  lineHeight: 1.7,
+                  background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.18)",
+                  borderRadius: 12, padding: "20px 24px", marginBottom: 16,
                 }}>
-                  ℹ Notion sync is currently mocked. To connect your real Notion workspace, add your NOTION_API_KEY and DATABASE_ID to <code>notion_service.py</code>.
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: result.notion_sync.success ? "#4ade80" : "#f87171" }} />
+                    <span style={{ color: "#a5b4fc", fontSize: 11, fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: "0.08em" }}>
+                      NOTION SYNC
+                    </span>
+                  </div>
+                  <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 14, marginBottom: 10 }}>
+                    {result.notion_sync.message}
+                  </div>
+                  <div style={{ color: "#4ade80", fontSize: 12, fontFamily: "'Space Mono', monospace" }}>
+                    {result.notion_sync.tasks_created} tasks created for <strong>{result.notion_sync.role}</strong>
+                  </div>
+                </div>
+                <div style={{
+                  background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)",
+                  borderRadius: 10, padding: "14px 18px", fontSize: 12,
+                  color: "rgba(255,255,255,0.25)", fontFamily: "'Space Mono', monospace", lineHeight: 1.8,
+                }}>
+                  ℹ Notion sync is mocked. Add NOTION_API_KEY and DATABASE_ID to notion_service.py to connect your real workspace.
                 </div>
               </div>
             )}
-          </div>
-        )}
-
-        {/* Footer hint */}
-        {!result && !loading && !error && (
-          <div style={{
-            color: "rgba(255,255,255,0.12)",
-            fontSize: 12,
-            fontFamily: "'Space Mono', monospace",
-            textAlign: "center",
-            marginTop: 60,
-            lineHeight: 1.8,
-          }}>
-            Backend must be running at localhost:8001<br />
-            <code style={{ color: "rgba(99,102,241,0.5)" }}>uvicorn app.main:app --port 8001 --reload</code>
           </div>
         )}
       </div>
