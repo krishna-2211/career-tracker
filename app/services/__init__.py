@@ -13,7 +13,7 @@ from app.services.search_service import search_web
 from app.services.llm_service import analyze_data
 from app.services.skill_service import extract_skills
 from app.services.roadmap_service import generate_roadmap
-from app.services.notion_service import send_to_notion
+from app.services.sqlite_service import send_to_notion  # was notion_service
 
 __all__ = [
     "search_web",

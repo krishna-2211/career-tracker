@@ -1,2 +1,2 @@
-import CareerTracker from './CareerTracker'
-export default CareerTracker
+import CareerTracker from "./CareerTracker";
+export default CareerTracker;
