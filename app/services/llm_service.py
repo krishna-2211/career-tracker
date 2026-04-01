@@ -1,113 +1,45 @@
-"""
-LLM Service - Handles AI/LLM analysis functionality.
+from google import genai
+import os
 
-This module provides functions to analyze search results using an LLM
-to extract relevant skills and insights for a career role.
-"""
-
+client = genai.Client()
 
 def analyze_data(search_results: dict) -> list:
+    combined_text = "\n".join(r["snippet"] for r in search_results.get("results", []))
+    role_query = search_results.get("query", "career role")
+
+    prompt = f"""
+    You are a career advisor.
+
+    Based on the following data for '{role_query}', extract ONLY a list of key skills.
+    Return them as a comma-separated list.
+
+    Data:
+    {combined_text}
     """
-    Analyze search results using an LLM to extract key skills.
-    
-    This function takes the search results and uses an LLM to identify
-    the most important technical and soft skills required for the career role.
-    
-    Args:
-        search_results: Dictionary containing search results from search_service.
-                       Expected format: {
-                           "query": "AI Engineer",
-                           "results": [{"title": "...", "snippet": "..."}, ...]
-                       }
-    
-    Returns:
-        A list of skill names extracted from the analysis.
-        Example: ["Python", "Machine Learning", "SQL", "LLMs", "Data Analysis"]
-    
-    Note:
-        This is currently using mock data. In production, you would call
-        an actual LLM API (like OpenAI, Anthropic, etc.) to analyze the content.
-    """
-    # In production, you would use something like:
-    # import openai
-    # 
-    # # Prepare the context from search results
-    # context = "\n".join([r["snippet"] for r in search_results["results"]])
-    # 
-    # # Call the LLM API
-    # response = openai.ChatCompletion.create(
-    #     model="gpt-4",
-    #     messages=[
-    #         {"role": "system", "content": "You are a career analyst. Extract key technical skills from the given text."},
-    #         {"role": "user", "content": f"Based on these search results for {search_results['query']}, list the most important skills:\n\n{context}"}
-    #     ]
-    # )
-    # 
-    # # Parse the response to extract skills
-    # skills = parse_llm_response(response)
-    # return skills
-    
-    # Mock LLM response based on the query
-    # Different career roles get different skill sets
-    query = search_results.get("query", "").lower()
-    
-    # Pre-defined skill sets for common roles (mock data)
-    skill_sets = {
-        "ai engineer": [
-            "Python", "Machine Learning", "Deep Learning", "TensorFlow", 
-            "PyTorch", "LLMs", "NLP", "Data Analysis", "SQL", "Git"
-        ],
-        "data scientist": [
-            "Python", "R", "SQL", "Machine Learning", "Statistics", 
-            "Data Visualization", "Pandas", "NumPy", "Tableau", "Jupyter"
-        ],
-        "software engineer": [
-            "Python", "JavaScript", "Java", "Git", "SQL", "REST APIs", 
-            "Docker", "AWS", "Agile", "Problem Solving"
-        ],
-        "devops engineer": [
-            "Docker", "Kubernetes", "AWS", "CI/CD", "Terraform", 
-            "Linux", "Python", "Bash", "Monitoring", "Git"
-        ],
-        "frontend developer": [
-            "JavaScript", "React", "TypeScript", "CSS", "HTML", 
-            "Next.js", "Git", "Responsive Design", "Testing", "Webpack"
-        ],
-        "backend developer": [
-            "Python", "Node.js", "SQL", "REST APIs", "Docker", 
-            "Microservices", "AWS", "Git", "Redis", "PostgreSQL"
-        ],
-        "full stack developer": [
-            "JavaScript", "Python", "React", "Node.js", "SQL", 
-            "MongoDB", "Docker", "AWS", "Git", "REST APIs"
-        ],
-        "cloud engineer": [
-            "AWS", "Azure", "GCP", "Terraform", "Docker", 
-            "Kubernetes", "Python", "Linux", "Networking", "Security"
-        ],
-        "ml engineer": [
-            "Python", "Machine Learning", "TensorFlow", "PyTorch", 
-            "MLOps", "Docker", "Kubernetes", "SQL", "Git", "AWS"
-        ],
-        "product manager": [
-            "Product Strategy", "Agile", "Data Analysis", "Communication", 
-            "User Research", "SQL", "A/B Testing", "Roadmapping", "Stakeholder Management", "Jira"
-        ]
-    }
-    
-    # Find the best matching skill set
-    skills = None
-    for role_key, role_skills in skill_sets.items():
-        if role_key in query:
-            skills = role_skills
-            break
-    
-    # Default skills if no match found
-    if skills is None:
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=prompt
+        )
+
+        if not response.text:
+            raise Exception("Empty response from LLM")
+
+        raw_text = response.text.strip()
+
         skills = [
-            "Python", "Problem Solving", "Communication", "Git", 
-            "SQL", "Cloud Computing", "Agile", "Data Analysis", 
-            "REST APIs", "Docker"
+            skill.strip()
+            for skill in raw_text.replace("\n", ",").split(",")
+            if skill.strip()
         ]
-    
-    return skills
+
+        print("✅ LLM RESPONSE:", skills)  # Debug log
+
+        return skills
+
+    except Exception as e:
+        print("❌ LLM ERROR:", e)
+
+        # HARD fallback (only if API fails)
+        return ["LLM_ERROR"]
