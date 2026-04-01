@@ -7,11 +7,11 @@ from app.services.search_service import search_web
 from app.services.llm_service import analyze_data
 from app.services.skill_service import extract_skills
 from app.services.roadmap_service import generate_roadmap
-from app.services.sheets_service import send_to_notion  # Google Sheets MCP
+from app.services.sqlite_service import send_to_notion, get_all_roadmaps, update_task_status
 
 app = FastAPI(
     title="Tech-Tsunami Innovation & Career Tracker",
-    description="DuckDuckGo Search + Ollama LLM + Google Sheets — fully free stack",
+    description="Live career analyzer — DuckDuckGo + Ollama + SQLite",
     version="2.0.0",
 )
 
@@ -28,31 +28,30 @@ logging.basicConfig(
 )
 
 
+# ── Request / Response models ────────────────────────────────────────────────
+
 class AnalyzeRequest(BaseModel):
-    role: str = Field(
-        ...,
-        description="Target career role or interest area",
-        min_length=1,
-        max_length=150,
-    )
+    role: str = Field(..., description="Target career role or interest area", min_length=1, max_length=150)
 
 
 class AnalyzeResponse(BaseModel):
     role:        str
     skills:      list[str]
     roadmap:     list[dict]
-    notion_sync: dict         # kept as notion_sync so frontend needs no changes
-    sources:     list[dict]   # DuckDuckGo result URLs
+    db_sync:     dict
+    sources:     list[dict]
 
+
+class TaskStatusRequest(BaseModel):
+    task_id: int
+    status:  str = Field(..., description="Not Started | In Progress | Completed")
+
+
+# ── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/")
 def root():
-    return {
-        "name":    "Tech-Tsunami Tracker",
-        "version": "2.0.0",
-        "stack":   "DuckDuckGo + Ollama + Google Sheets",
-        "status":  "running",
-    }
+    return {"name": "Tech-Tsunami Tracker", "version": "2.0.0", "status": "running"}
 
 
 @app.get("/health")
@@ -62,6 +61,14 @@ def health_check():
 
 @app.post("/analyze", response_model=AnalyzeResponse)
 def analyze_career_role(request: AnalyzeRequest):
+    """
+    Full pipeline:
+      1. DuckDuckGo search (3 queries, ~15 results)
+      2. Ollama LLM skill extraction
+      3. Skill deduplication & normalization
+      4. Roadmap generation
+      5. SQLite persistence
+    """
     try:
         role = request.role.strip()
 
@@ -74,11 +81,10 @@ def analyze_career_role(request: AnalyzeRequest):
         logging.info(f"[3/4] Skill normalization → {len(raw_skills)} raw skills")
         skills = extract_skills(raw_skills)
 
-        logging.info(f"[4/4] Roadmap + Google Sheets sync → {len(skills)} skills")
-        roadmap       = generate_roadmap(skills)
-        sheets_result = send_to_notion(roadmap, role)
+        logging.info(f"[4/4] Roadmap + SQLite save → {len(skills)} skills")
+        roadmap  = generate_roadmap(skills)
+        db_sync  = send_to_notion(roadmap, role)
 
-        # Surface source URLs to the frontend
         sources = [
             {"title": r["title"], "url": r["url"]}
             for r in search_results.get("results", [])
@@ -89,13 +95,28 @@ def analyze_career_role(request: AnalyzeRequest):
             role=role,
             skills=skills,
             roadmap=roadmap,
-            notion_sync=sheets_result,
+            db_sync=db_sync,
             sources=sources,
         )
 
     except Exception as e:
-        logging.error(f"Error analyzing '{request.role}': {e}", exc_info=True)
+        logging.error(f"Error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/history")
+def get_history():
+    """Return all previously saved roadmaps from SQLite."""
+    return {"roadmaps": get_all_roadmaps()}
+
+
+@app.patch("/task/status")
+def patch_task_status(body: TaskStatusRequest):
+    """Update a single task's status in SQLite."""
+    success = update_task_status(body.task_id, body.status)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid task_id or status")
+    return {"success": True, "task_id": body.task_id, "status": body.status}
 
 
 if __name__ == "__main__":
