@@ -61,7 +61,7 @@ MCP/
 
 ```bash
 # Install Ollama from https://ollama.com/download, then pull the model
-ollama pull llama3.2
+ollama pull phi3
 
 # Ollama starts automatically after install, or run manually
 ollama serve
@@ -90,7 +90,7 @@ Create a `.env` file in the project root:
 ```env
 TAVILY_API_KEY=tvly-xxxxxxxxxxxxxxxx
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.2
+OLLAMA_MODEL=phi3
 SQLITE_DB_PATH=roadmaps.db
 MEMORY_PATH=memory.json
 ```
