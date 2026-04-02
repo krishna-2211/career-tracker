@@ -239,6 +239,6 @@ Any other role will use the live Tavily search + Ollama extraction pipeline.
 
 ---
 
-## 📄 License
+## 📄 Copyright:
 
-MIT License — feel free to use, modify, and distribute.
+Krishna Panchal — feel free to use, modify, and distribute.
