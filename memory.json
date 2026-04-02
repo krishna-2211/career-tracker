@@ -1,0 +1,86 @@
+{
+  "roles_analyzed": [
+    "Full Stack Developer",
+    "Cloud Engineer",
+    "Backend Developer"
+  ],
+  "skill_history": {
+    "Full Stack Developer": [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Express.js",
+      "PostgreSQL/MongoDB",
+      "Docker",
+      "Git"
+    ],
+    "Cloud Engineer": [
+      "GitOps",
+      "Platform Engineering",
+      "AWS (Compute, Storage, Networking)",
+      "Terraform",
+      "CI/CD Pipelines",
+      "Linux Administration",
+      "Python Programming",
+      "Docker"
+    ],
+    "Backend Developer": [
+      "Python",
+      "Java",
+      "Go",
+      "MongoDB",
+      "Spring Framework",
+      "GraphQL"
+    ]
+  },
+  "completed_tasks": [],
+  "in_progress_tasks": [],
+  "sessions": [
+    {
+      "role": "Full Stack Developer",
+      "skills": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Express.js",
+        "PostgreSQL/MongoDB",
+        "Docker",
+        "Git"
+      ],
+      "task_count": 17,
+      "roadmap_id": 3,
+      "analyzed_at": "2026-04-02T00:06:59.626369"
+    },
+    {
+      "role": "Cloud Engineer",
+      "skills": [
+        "GitOps",
+        "Platform Engineering",
+        "AWS (Compute, Storage, Networking)",
+        "Terraform",
+        "CI/CD Pipelines",
+        "Linux Administration",
+        "Python Programming",
+        "Docker"
+      ],
+      "task_count": 22,
+      "roadmap_id": 4,
+      "analyzed_at": "2026-04-02T00:09:58.135267"
+    },
+    {
+      "role": "Backend Developer",
+      "skills": [
+        "Python",
+        "Java",
+        "Go",
+        "MongoDB",
+        "Spring Framework",
+        "GraphQL"
+      ],
+      "task_count": 17,
+      "roadmap_id": 5,
+      "analyzed_at": "2026-04-02T00:19:49.764005"
+    }
+  ],
+  "last_updated": "2026-04-02T00:19:49.764005"
+}

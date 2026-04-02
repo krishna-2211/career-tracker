@@ -339,7 +339,7 @@ export default function CareerTracker() {
               background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: 10, padding: 3, marginBottom: 24, width: "fit-content",
             }}>
-              {[{ key: "roadmap", label: "🗺 Roadmap" }, { key: "skills", label: "⚡ Skills" }, { key: "notion", label: "📓 Notion" }].map(tab => (
+              {[{ key: "roadmap", label: "🗺 Roadmap" }, { key: "skills", label: "⚡ Skills" }].map(tab => (
                 <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
                   background: activeTab === tab.key ? "rgba(99,102,241,0.2)" : "transparent",
                   color: activeTab === tab.key ? "#a5b4fc" : "rgba(255,255,255,0.3)",
@@ -382,36 +382,6 @@ export default function CareerTracker() {
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {result.skills.map((s, i) => <SkillPill key={i} skill={s} />)}
-                </div>
-              </div>
-            )}
-
-            {/* Notion */}
-            {activeTab === "notion" && (
-              <div>
-                <div style={{
-                  background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.18)",
-                  borderRadius: 12, padding: "20px 24px", marginBottom: 16,
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: result.notion_sync.success ? "#4ade80" : "#f87171" }} />
-                    <span style={{ color: "#a5b4fc", fontSize: 11, fontFamily: "'Space Mono', monospace", fontWeight: 700, letterSpacing: "0.08em" }}>
-                      NOTION SYNC
-                    </span>
-                  </div>
-                  <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 14, marginBottom: 10 }}>
-                    {result.notion_sync.message}
-                  </div>
-                  <div style={{ color: "#4ade80", fontSize: 12, fontFamily: "'Space Mono', monospace" }}>
-                    {result.notion_sync.tasks_created} tasks created for <strong>{result.notion_sync.role}</strong>
-                  </div>
-                </div>
-                <div style={{
-                  background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)",
-                  borderRadius: 10, padding: "14px 18px", fontSize: 12,
-                  color: "rgba(255,255,255,0.25)", fontFamily: "'Space Mono', monospace", lineHeight: 1.8,
-                }}>
-                  ℹ Notion sync is mocked. Add NOTION_API_KEY and DATABASE_ID to notion_service.py to connect your real workspace.
                 </div>
               </div>
             )}
