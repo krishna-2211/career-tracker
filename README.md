@@ -1,4 +1,4 @@
-# 🌊 Tech-Tsunami Career Tracker
+# 🌊 Career Tracker
 
 A full-stack career roadmap generator built with **FastAPI** + **React** + **MCP**. Enter any tech role and get a structured learning roadmap with skills, prioritized tasks, and persistent memory — powered by live web search (Tavily), a local LLM (Ollama), and an MCP server that connects directly to Claude Desktop.
 
